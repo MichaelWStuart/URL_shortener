@@ -1,4 +1,3 @@
-const userInfo = require('./.mongo_login');
 const mongo = require('mongodb').MongoClient;
 const path = require('path');
 const express = require('express');
@@ -6,9 +5,13 @@ const app = express();
 const bodyParser= require('body-parser');
 const PORT = process.env.PORT || 8080;
 
-const user = userInfo.username;
-const pw = userInfo.password;
+require('dotenv').load();
+
+const user = process.env.username;
+const pw = process.env.password;
 const dbURL = `mongodb://${user}:${pw}@ds033875.mlab.com:33875/url_shortener`;
+
+console.log(pw)
 
 const parseURL = (url) => url.includes('http://') ? url : `http://${url}`;
 
