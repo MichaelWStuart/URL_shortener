@@ -2,5 +2,5 @@
 
 **Instructions:**
 
--Input URL to be shortened
--Receive shortened URL
+*Input URL to be shortened
+*Receive shortened URL
