@@ -44,7 +44,7 @@ app.post('/shortenedURL', (req,res) => {
     if (err) return console.log(err);
     collection.save({long, short: count + 1}, (err,result) => {
       if (err) return console.log(err);
-      res.send(`Your shortened URL: ${address}${count + 1}`);
+      res.send(`Your shortened URL: ${serverAddress}${count + 1}`);
     })
   });
 })
