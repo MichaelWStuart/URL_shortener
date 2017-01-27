@@ -4,14 +4,14 @@ const express = require('express');
 const app = express();
 const bodyParser= require('body-parser');
 const PORT = process.env.PORT || 8080;
+let address = 'https://linkshrink.herokuapp.com/';
 
-require('dotenv').load();
+if(process.env.node_env !== 'production') {
+  require('dotenv').load();
+  address = '';
+}
 
-const user = process.env.username;
-const pw = process.env.password;
-const dbURL = `mongodb://${user}:${pw}@ds033875.mlab.com:33875/url_shortener`;
-
-console.log(pw)
+const dbURL = `mongodb://${process.env.username}:${process.env.password}@ds033875.mlab.com:33875/url_shortener`;
 
 const parseURL = (url) => url.includes('http://') ? url : `http://${url}`;
 
@@ -37,7 +37,8 @@ app.get('/:input', (req,res) => {
   const collection = db.collection('urls');
   const short = Number(req.params.input);
   collection.findOne({short}, (err, item) => {
-    res.redirect(item.long);
+    console.log('asdasd')
+    res.redirect(`${address}${item.long}`);
   })
 })
 
