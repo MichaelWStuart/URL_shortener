@@ -28,7 +28,7 @@ app.post('/shortenedURL', (req,res) => {
     if (err) return console.log(err);
     collection.save({long, short: count + 1}, (err,result) => {
       if (err) return console.log(err);
-      res.send(`Your shortened URL: ${count + 1}`);
+      res.send(`Your shortened URL: ${address}${count + 1}`);
     })
   });
 })
@@ -38,7 +38,7 @@ app.get('/:input', (req,res) => {
   const short = Number(req.params.input);
   collection.findOne({short}, (err, item) => {
     console.log('asdasd')
-    res.redirect(`${address}${item.long}`);
+    res.redirect(item.long);
   })
 })
 
