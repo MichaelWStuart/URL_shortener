@@ -21,6 +21,10 @@ app.get('/', (req,res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 })
 
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join(__dirname, 'favicon.ico'));
+});
+
 app.post('/shortenedURL', (req,res) => {
   const collection = db.collection('urls');
   const long = parseURL(req.body.URL);
@@ -37,7 +41,6 @@ app.get('/:input', (req,res) => {
   const collection = db.collection('urls');
   const short = Number(req.params.input);
   collection.findOne({short}, (err, item) => {
-    console.log('asdasd')
     res.redirect(item.long);
   })
 })
