@@ -13,9 +13,14 @@ if(process.env.node_env !== 'production') {
   serverAddress = '';
 }
 
-const dbURL = `mongodb://${process.env.username}:${process.env.password}@ds033875.mlab.com:33875/url_shortener`;
+const dbURL = `mongodb://${process.env.username}:${process.env.password}@${process.env.mdbloc}:${process.env.mdbport}/url_shortener`;
 
-const addHTTP = (url) => url.includes('http://') ? url : `http://${url}`;
+const addHTTP = (url) => {
+  if ((url.slice(0,8) === 'https://') || (url.slice(0,7) === 'http://')){
+    return url;
+  }
+  return `http://${url}`;
+}
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -41,10 +46,11 @@ app.post('/shortenedURL', (req,res) => {
   const collection = db.collection('urls');
   const long = addHTTP(req.body.URL);
   collection.count({}, (err,count) => {
+    const extention = count + 1;
     if (err) return console.log(err);
-    collection.save({long, short: count + 1}, (err,result) => {
+    collection.save({long, short: extention}, (err,result) => {
       if (err) return console.log(err);
-      res.send(`Your shortened URL: ${serverAddress}${count + 1}`);
+      res.send(`Your shortened URL: ${serverAddress}${extention}`);
     })
   });
 })
@@ -53,7 +59,11 @@ app.get('/:input', (req,res) => {
   const collection = db.collection('urls');
   const short = Number(req.params.input);
   collection.findOne({short}, (err, item) => {
-    res.redirect(item.long);
+    try {
+      res.redirect(item.long);
+    } catch (e) {
+      res.send('URL not found');
+    }
   })
 })
 
